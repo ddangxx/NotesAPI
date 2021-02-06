@@ -27,6 +27,7 @@ namespace NotesAPI.Controllers
         }
 
         [HttpGet]
+        //[Route("api/note")]
         public IActionResult GetNotes()
         {
 
@@ -41,6 +42,7 @@ namespace NotesAPI.Controllers
             }
         }
 
+        //[Route("api/note/{id}")]
         [HttpGet("{id}")]
         public IActionResult GetNote(int id)
         {            
@@ -66,6 +68,7 @@ namespace NotesAPI.Controllers
             }
         }
 
+        //[Route("api/note/")]
         [HttpPost]
         public IActionResult CreateNote([FromBody] string newNote)
         {
@@ -103,6 +106,7 @@ namespace NotesAPI.Controllers
             }
         }
 
+        //[Route("api/note/{id}")]
         [HttpDelete("{id}")]
         public IActionResult DeleteNote(int id)
         {
@@ -138,6 +142,7 @@ namespace NotesAPI.Controllers
             }
         }
 
+        //[Route("api/note/{id}")]
         [HttpPut("{id}")]
         public IActionResult UpdateNote([FromRoute] int id, [FromBody] string newNote)
         {

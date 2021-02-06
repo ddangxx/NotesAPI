@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using NotesAPI.Infrastructure.Configuration;
 
 namespace NotesAPI
@@ -26,28 +27,41 @@ namespace NotesAPI
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "Notes API", Version = "v1" });
+            });
 
             var notesConfiguration = new NotesConfiguration()
             {
                 FilePath = Configuration[FilePath]
             };
 
-            services.AddScoped(svcs => notesConfiguration);
-
+            services.AddScoped(svcs => notesConfiguration);         
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseHttpsRedirection();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("v1/swagger.json", "My API V1");
+            });
 
             app.UseRouting();
 
@@ -57,6 +71,7 @@ namespace NotesAPI
             {
                 endpoints.MapControllers();
             });
+            
         }
     }
 }
