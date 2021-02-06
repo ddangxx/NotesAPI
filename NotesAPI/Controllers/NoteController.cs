@@ -26,8 +26,7 @@ namespace NotesAPI.Controllers
             jsonFile = $"{_configuration.FilePath}";
         }
 
-        [HttpGet]
-        //[Route("api/note")]
+        [HttpGet]        
         public IActionResult GetNotes()
         {
 
@@ -41,8 +40,7 @@ namespace NotesAPI.Controllers
                 return NotFound("File Is Empty");
             }
         }
-
-        //[Route("api/note/{id}")]
+       
         [HttpGet("{id}")]
         public IActionResult GetNote(int id)
         {            
@@ -67,8 +65,7 @@ namespace NotesAPI.Controllers
                 return NotFound("File Is Empty");
             }
         }
-
-        //[Route("api/note/")]
+        
         [HttpPost]
         public IActionResult CreateNote([FromBody] string newNote)
         {
@@ -105,8 +102,7 @@ namespace NotesAPI.Controllers
                 return StatusCode(424);
             }
         }
-
-        //[Route("api/note/{id}")]
+        
         [HttpDelete("{id}")]
         public IActionResult DeleteNote(int id)
         {
@@ -141,8 +137,7 @@ namespace NotesAPI.Controllers
                 return NotFound("File Is Empty");
             }
         }
-
-        //[Route("api/note/{id}")]
+        
         [HttpPut("{id}")]
         public IActionResult UpdateNote([FromRoute] int id, [FromBody] string newNote)
         {
