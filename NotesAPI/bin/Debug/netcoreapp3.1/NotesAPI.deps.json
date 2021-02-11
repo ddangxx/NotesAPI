@@ -389,6 +389,7 @@
       },
       "NotesAPI.Infrastructure/1.0.0": {
         "dependencies": {
+          "Newtonsoft.Json": "12.0.3",
           "Swashbuckle.AspNetCore": "6.0.0"
         },
         "runtime": {

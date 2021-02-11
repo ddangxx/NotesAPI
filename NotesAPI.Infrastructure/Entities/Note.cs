@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace NotesAPI.Infrastructure.Entities
@@ -13,6 +14,7 @@ namespace NotesAPI.Infrastructure.Entities
     public class Notes
     {
         public List<Note> NotesList { get; set; }
+        
         public Notes()
         {
             this.NotesList = new List<Note>();

@@ -8,6 +8,7 @@ using NotesAPI.Infrastructure.Entities;
 using System.Linq;
 using System.IO;
 using System.Threading;
+using NotesAPI.Infrastructure.Interfaces;
 
 namespace NotesAPI.Controllers
 {
@@ -15,22 +16,22 @@ namespace NotesAPI.Controllers
     [Route("api/[controller]")]
     public class NoteController : ControllerBase
     {
-        private static Notes noteContainer = null;
+        /*private static Notes noteContainer = null;
 
         private NotesConfiguration _configuration;
         private string jsonFile;
-        private ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim();
-        public NoteController(NotesConfiguration configuration)
+        private ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim();*/
+        private INoteRepository _noteRepository;
+        public NoteController(INoteRepository noteRepository)
         {
-            _configuration = configuration;
-            jsonFile = $"{_configuration.FilePath}";
+            _noteRepository = noteRepository;            
         }
 
         [HttpGet]        
         public IActionResult GetNotes()
         {
 
-            Notes notes = MapNote();
+            Notes notes = _noteRepository.MapNote();
             if (notes != null)
             {
                 return Ok(notes);
@@ -45,7 +46,7 @@ namespace NotesAPI.Controllers
         public IActionResult GetNote(int id)
         {            
 
-            Notes notes = MapNote();
+            Notes notes = _noteRepository.MapNote();
             if (notes != null)
             {
                 
@@ -72,7 +73,7 @@ namespace NotesAPI.Controllers
             try
             {
                 int id;
-                Notes notes = MapNote();
+                Notes notes = _noteRepository.MapNote();
                 if(notes != null)
                 {
                     // in case id is not in ascending order
@@ -92,8 +93,8 @@ namespace NotesAPI.Controllers
                 };
 
                 notes.NotesList.Add(note);
-                                
-                SaveNote(notes);
+
+                _noteRepository.SaveNote(notes);
 
                 return StatusCode(201);
             }
@@ -107,7 +108,7 @@ namespace NotesAPI.Controllers
         public IActionResult DeleteNote(int id)
         {
 
-            Notes notes = MapNote();
+            Notes notes = _noteRepository.MapNote();
             if (notes != null)
             {
 
@@ -118,8 +119,8 @@ namespace NotesAPI.Controllers
                     bool response = notes.NotesList.Remove(noteToRemove);
 
                     if (response)
-                    {                        
-                        SaveNote(notes);
+                    {
+                        _noteRepository.SaveNote(notes);
                         return Ok("Successfully Deleted Note");
                     }
                     else
@@ -141,7 +142,7 @@ namespace NotesAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateNote([FromRoute] int id, [FromBody] string newNote)
         {
-            Notes notes = MapNote();
+            Notes notes = _noteRepository.MapNote();
             if (notes != null)
             {
 
@@ -150,8 +151,8 @@ namespace NotesAPI.Controllers
                 if (index >= 0)
                 {
                     notes.NotesList[index].Data = newNote;
-                    notes.NotesList[index].DateCreated = DateTime.Now;                    
-                    SaveNote(notes);
+                    notes.NotesList[index].DateCreated = DateTime.Now;
+                    _noteRepository.SaveNote(notes);
                     return Ok("Successfully Updated Note");
                 }
                 else
@@ -166,7 +167,7 @@ namespace NotesAPI.Controllers
 
         }
 
-        private Notes MapNote()
+        /*private Notes MapNote()
         {
             Notes notes = null;
             string json = string.Empty;
@@ -181,10 +182,10 @@ namespace NotesAPI.Controllers
                 }
                 catch (System.IO.FileNotFoundException ex)
                 {
-                    /* handling exception if there is no json file
+                    *//* handling exception if there is no json file
                      * get list will return error File is Empty
                      * create note will create a json file
-                     */
+                     *//*
                 }
                 
 
@@ -220,7 +221,7 @@ namespace NotesAPI.Controllers
             {
                 cacheLock.ExitWriteLock();
             }
-        }
+        }*/
 
     }
 }

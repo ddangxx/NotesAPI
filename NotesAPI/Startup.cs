@@ -12,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using NotesAPI.Infrastructure.Configuration;
+using NotesAPI.Infrastructure.Interface;
+using NotesAPI.Infrastructure.Interfaces;
 
 namespace NotesAPI
 {
@@ -39,7 +41,8 @@ namespace NotesAPI
                 FilePath = Configuration[FilePath]
             };
 
-            services.AddScoped(svcs => notesConfiguration);         
+            services.AddScoped(svcs => notesConfiguration);
+            services.AddScoped<INoteRepository, NoteRepository>();
 
         }
 
